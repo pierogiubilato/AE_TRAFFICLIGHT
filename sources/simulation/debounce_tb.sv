@@ -85,23 +85,24 @@ module debounce_tb ();
         rClk = ! rClk;
     end  
 	
-
     // Pseudosequence.
 	always begin
+		
 		#40000 rIn = 1'b1;
-		#400 rIn = 1'b0;		
-		#800 rIn = 1'b1;	
-		#800 rIn = 1'b0;				
-		#800 rIn = 1'b1;
-        #40000 rIn = 1'b0;
-	    #4000 rIn = 1'b1;		
-		#40000 rIn = 1'b0;
-        #400 rIn = 1'b1;
-		#800 rIn = 1'b0;		
-		#800 rIn = 1'b1;
-        #800 rIn = 1'b0;
-	    #40000 rIn = 1'b1;		
-        #4000 rIn = 1'b0;
+		#900 rIn = 1'b0;		
+		#200 rIn = 1'b1;	
+		#2300 rIn = 1'b0;				
+		#1800 rIn = 1'b1;
+        #70000 rIn = 1'b0;
+	    #9000 rIn = 1'b1;		
+		#30000 rIn = 1'b0;
+        #800 rIn = 1'b1;
+		#300 rIn = 1'b0;		
+		#700 rIn = 1'b1;
+        #600 rIn = 1'b0;
+	    #60000 rIn = 1'b1;		
+        #2000 rIn = 1'b0;
+
 	end
 
 endmodule

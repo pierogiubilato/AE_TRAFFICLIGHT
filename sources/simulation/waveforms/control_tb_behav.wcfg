@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="control_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="control_tb" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="32,499,988.498 ns"></ZoomStartTime>
+      <ZoomEndTime time="32,500,016.419 ns"></ZoomEndTime>
+      <Cursor1Time time="32,500,002.498 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="194"></NameColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="27" />
+   <wvobject type="divider" fp_name="divider318">
+      <obj_property name="label">Simulation</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/seed" type="array">
+      <obj_property name="ElementShortName">seed[31:0]</obj_property>
+      <obj_property name="ObjectShortName">seed[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_CLK_FRQ" type="array">
+      <obj_property name="ElementShortName">C_CLK_FRQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_CLK_FRQ[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#A0A0A4</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_CLK_JTR" type="array">
+      <obj_property name="ElementShortName">C_CLK_JTR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_CLK_JTR[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#A0A0A4</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_CLK_PERIOD" type="other">
+      <obj_property name="ElementShortName">C_CLK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">C_CLK_PERIOD</obj_property>
+      <obj_property name="CustomSignalColor">#A0A0A4</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_PERIOD" type="array">
+      <obj_property name="ElementShortName">C_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_PERIOD[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#A0A0A4</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider317">
+      <obj_property name="label">Parameters</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_INT_RED" type="array">
+      <obj_property name="ElementShortName">C_INT_RED[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_INT_RED[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#DCDCDC</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_INT_GREEN" type="array">
+      <obj_property name="ElementShortName">C_INT_GREEN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_INT_GREEN[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#DCDCDC</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_INT_YELLOW" type="array">
+      <obj_property name="ElementShortName">C_INT_YELLOW[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_INT_YELLOW[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#DCDCDC</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/C_INT_PEDESTRIAN" type="array">
+      <obj_property name="ElementShortName">C_INT_PEDESTRIAN[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_INT_PEDESTRIAN[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#DCDCDC</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider319">
+      <obj_property name="label">Timing</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/rRstb" type="logic">
+      <obj_property name="ElementShortName">rRstb</obj_property>
+      <obj_property name="ObjectShortName">rRstb</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/rClk" type="logic">
+      <obj_property name="ElementShortName">rClk</obj_property>
+      <obj_property name="ObjectShortName">rClk</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/rBlink" type="logic">
+      <obj_property name="ElementShortName">rBlink</obj_property>
+      <obj_property name="ObjectShortName">rBlink</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider320">
+      <obj_property name="label">Inputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/rMode" type="logic">
+      <obj_property name="ElementShortName">rMode</obj_property>
+      <obj_property name="ObjectShortName">rMode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/rPedestrian" type="logic">
+      <obj_property name="ElementShortName">rPedestrian</obj_property>
+      <obj_property name="ObjectShortName">rPedestrian</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/rTraffic" type="logic">
+      <obj_property name="ElementShortName">rTraffic</obj_property>
+      <obj_property name="ObjectShortName">rTraffic</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider321">
+      <obj_property name="label">Outputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/wLight" type="array">
+      <obj_property name="ElementShortName">wLight[1:0]</obj_property>
+      <obj_property name="ObjectShortName">wLight[1:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider322">
+      <obj_property name="label">DUT Internals</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/DUT/rState" type="array">
+      <obj_property name="ElementShortName">rState[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rState[1:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/DUT/lStateNext" type="array">
+      <obj_property name="ElementShortName">lStateNext[1:0]</obj_property>
+      <obj_property name="ObjectShortName">lStateNext[1:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/DUT/rTimer" type="array">
+      <obj_property name="ElementShortName">rTimer[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rTimer[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#800000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/DUT/rPedestrian" type="logic">
+      <obj_property name="ElementShortName">rPedestrian</obj_property>
+      <obj_property name="ObjectShortName">rPedestrian</obj_property>
+   </wvobject>
+   <wvobject fp_name="/control_tb/DUT/rStateJump" type="logic">
+      <obj_property name="ElementShortName">rStateJump</obj_property>
+      <obj_property name="ObjectShortName">rStateJump</obj_property>
+   </wvobject>
+</wave_config>

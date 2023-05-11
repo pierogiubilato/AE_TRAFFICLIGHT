@@ -39,7 +39,7 @@
 // Behavioural.
 module  debounce # (
 		parameter C_CLK_FRQ = 100_000_000, 	// Clock frequency [Hz].
-		parameter C_INTERVAL = 0.010   		// Wait interval [ms].
+		parameter C_INTERVAL = 0.010   		// Wait interval [ms](any shorter signal will be dropped).
 	) (
 		input rstb,
 		input clk,
@@ -70,7 +70,7 @@ module  debounce # (
 	reg DFF1, DFF2;
 	
 	// Control flags.
-	wire wClear;		// Clear the counter if '=1';		
+	wire wClear;		// Clear the counter is '=1';		
 	wire wEnable;		// Enable the counter while '=1';
 
 
@@ -79,7 +79,7 @@ module  debounce # (
     // =========================================================================
 
 	// XOR of the thwo FF to generate counter reset signal.
-	assign wClear = (DFF1  ^ DFF2);
+	assign wClear = (DFF1 ^ DFF2);
 	
 	// Enable signal, makes the output FF latch the signal from FF2. Inverted,
 	// it is also used to stop the counter.
