@@ -43,7 +43,7 @@ module control #(
     parameter C_INT_RED = 200, 	        // Red ineterval [blinks].
     parameter C_INT_GREEN = 200, 	    // Green ineterval [blinks].
     parameter C_INT_YELLOW = 20, 	    // Yellow ineterval [blinks].
-    parameter C_INT_PEDESTRIAN = 100 	// Pedestrian ineterval [blinks].
+    parameter C_INT_WALK = 100 	        // Pedestrian ineterval [blinks].
  )(	
 	// Timing.
 	input rstb,                        // Reset (bar).  
@@ -66,23 +66,25 @@ module control #(
     localparam sRed         = 2'b00;
     localparam sGreen       = 2'b01;
     localparam sYellow      = 2'b10;
-    localparam sPedestrian  = 2'b11;
+    localparam sWalk        = 2'b11;
 
-    // SM outputs.
-    localparam sRedOut          = 2'b00;
-    localparam sGreenOut        = 2'b01;
-    localparam sYellowOut       = 2'b10;
-    localparam sPedestrianOut   = 2'b11;
+    // SM outputs. Here they are completely redundant, just
+    // to show an example of pre-coding.
+    localparam sRedOut      = 2'b00;
+    localparam sGreenOut    = 2'b01;
+    localparam sYellowOut   = 2'b10;
+    localparam sWalkOut     = 2'b11;
 
     // SM state ragister.
     reg [1:0] rState = sRed;    // Safest state to start a semaphore!
+    reg [1:0] rStateOld;        // Old state, used to generate the counter reset signal.
     
     // SM next state logic. THIS WILL NOT generate an actual Flip-Flop!
     reg [1:0] lStateNext;       // Next state register, does not require initialization.
-    
+    wire wStateJump;            // Signals state(S) transitions.
+        
     // Interval timer register.
     reg [7:0] rTimer;           // BEWARE: vector must contain the biggest interval.
-    reg rStateJump = 1'b0;      // Latch to record states transitions.    
     
     // Pedestrian button register.
     reg rPedestrian = 1'b0;     // Pedestrian signal latch.
@@ -94,11 +96,12 @@ module control #(
     // =========================================================================
 
 	// State machine main synchronous process. Transfer 'lStateNext' into 'rState'
-    always @(rstb, posedge clk, rTimer) begin
+    always @(posedge clk) begin
         
         // Reset (bar).
         if (rstb == 1'b0) begin
             rState <= sRed;
+            rStateOld <= sRed;
             outLight <= 2'b00;
         
         // State transition.
@@ -107,20 +110,14 @@ module control #(
             // Store next state.
             rState <= lStateNext;
             
-            // Latch if there has been a state transition.
-            // This is necessary only to synchronize the interval counter,
-            // not for the state machine itself.
-            if (rState != lStateNext) begin 
-                rStateJump <= 1'b1;
-            end else begin
-                if (rTimer == 0) begin
-                    rStateJump <= 1'b0;
-                end
-            end
+            // Store the current state (used by the counter to 
+            // self-reset on state-change).
+            rStateOld <= rState;
         end
     end
     
-    // State machine synchronous output.
+    // State machine synchronous output (here for example, redundant
+    // for this specific application.
     always @(rstb, rState) begin
         
         // Reset (bar).
@@ -131,17 +128,17 @@ module control #(
                 sRed: begin outLight <= sRedOut; end
                 sGreen: begin outLight <= sGreenOut; end
                 sYellow: begin outLight <= sYellowOut; end
-                sPedestrian: begin outLight <= sPedestrianOut; end
+                sWalk: begin outLight <= sWalkOut; end
             endcase            
         end
     end
     
     // Interval counter. It counts at every 'blink' positive edge transition.
     // It resets on 'rstb' and at every state transition.
-    always @(rstb, posedge blink) begin
+    always @(posedge blink) begin
         
         // Reset (bar) the timer.
-        if (rstb == 1'b0 | rStateJump == 1'b1) begin
+        if (rstb == 1'b0 | wStateJump == 1'b1) begin
             rTimer <= 0;
         end else begin
             rTimer <= rTimer + 1;
@@ -151,13 +148,13 @@ module control #(
     // Pedestrian button latch. Stores the last value of the pedestrian button,
     // unless we are in reset or already in the pedestrian state, in which case
     // the value is reset to zero. 
-    always @(rstb, posedge clk, rState, posedge inPedestrian) begin
+    always @(rstb, rState, inPedestrian) begin
         
         // Reset (bar).
-        if (rstb == 1'b0 || rState == sPedestrian) begin
+        if (rstb == 1'b0 || rState == sWalk) begin
             rPedestrian <= 1'b0;
         end else begin
-            rPedestrian <= rPedestrian | inPedestrian;
+            rPedestrian <= (rPedestrian | inPedestrian);
         end
     end
     
@@ -166,6 +163,10 @@ module control #(
     // ==                      Asynchronous assignments                       ==
     // =========================================================================
 
+	// State jump signal. It stays high for 1 clock cycle every time the state
+	// changes. It is used to reset the counter at every state transition.
+	assign wStateJump = (rState != rStateOld) ? 1'b1 : 1'b0;
+	
 	
 	// State machine async process. Update the next state considering the present 
 	// state ('rState') and the other conditions ('inMode', 'inPedestrian', 
@@ -180,14 +181,21 @@ module control #(
             
             // Red.
             sRed: begin
+                
                 // The pedestrian has priority in 'inMode = 1', and shortens the red interval.
-                if (inPedestrian == 1'b1 & inMode == 1'b1) begin
-                    lStateNext <= sPedestrian;  // Force transition to pedestrian.
+                if (rPedestrian == 1'b1 & inMode == 1'b1) begin
+                    lStateNext <= sWalk;        // Force transition to walk.
                                     
                 // Otherwise, just wait for the red interval to expire.
                 end else begin
                     if (rTimer >= C_INT_RED) begin
-                        lStateNext <= sGreen;   // Jump only if tRed expired.
+                        
+                        // Jump to èdestrian if the crosswalk has been boocked.
+                        if (rPedestrian == 1'b1) begin
+                            lStateNext <= sWalk;    // Jump to walk.
+                        end else begin
+                            lStateNext <= sGreen;   // Jump to green.
+                        end        
                     end else begin
                         lStateNext <= sRed;     // Stay on red until tRed expires.
                     end
@@ -198,12 +206,12 @@ module control #(
             sGreen: begin
                 
                 // The pedestrian has priority in 'inMode = 1', and shortens the green interval.
-                if (inPedestrian == 1'b1 & inMode == 1'b1) begin
+                if (rPedestrian == 1'b1 & inMode == 1'b1) begin
                     lStateNext <= sYellow;      // Force transition to yellow.
                 
                 // Otherwise, just wait for the green interval to expire.
                 end else begin
-                    if (rTimer >= C_INT_GREEN & rStateJump == 1'b0) begin
+                    if (rTimer >= C_INT_GREEN) begin
                         lStateNext <= sYellow;  // No pedestrian priority, jump only if tGreen expired.
                     end else begin
                         lStateNext <= sGreen;   // Stay on green until tGreen expires.
@@ -223,13 +231,13 @@ module control #(
             end
                 
             // Pedestrian.
-            sPedestrian: begin
+            sWalk: begin
  
                 // Jump only at the end of the pedestrian interval, and always to red for safety.
-                if (rTimer >= C_INT_PEDESTRIAN) begin
+                if (rTimer >= C_INT_WALK) begin
                     lStateNext <= sRed;         // Timer expired, jump to red.
                 end else begin    
-                    lStateNext <= sPedestrian;  // Wait for interval to expire..
+                    lStateNext <= sWalk;  // Wait for interval to expire..
                 end
             end
             

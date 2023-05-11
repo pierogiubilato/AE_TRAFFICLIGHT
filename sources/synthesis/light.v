@@ -9,7 +9,7 @@
 \#############################################################################*/
 
 // INFO
-// The light module transform a 2-bit signal (4 states) into a color-coded
+// The light module transforms a 2-bit signal (4 states) into a color-coded
 // output for the Arty board.
 
 
@@ -37,10 +37,10 @@
 
 // Behavioural.
 module  light # (
-		parameter [11:0] C_COLORS = {1'b1, 1'b0, 1'b0,   
-		                             1'b0, 1'b1, 1'b0,   
-		                             1'b1, 1'b1, 1'b0,   
-		                             1'b1, 1'b1, 1'b1} // RGB bits for each LED.
+		parameter [11:0] C_COLORS = {1'b1, 1'b0, 1'b0,  // Red   
+		                             1'b0, 1'b1, 1'b0,  // Green 
+		                             1'b1, 1'b1, 1'b0,  // Yellow 
+		                             1'b1, 1'b1, 1'b1}  // Walk (WHITE).
 	) (
 		input rstb,               // Reset (bar).  
 		input clk,                // Clock.
@@ -72,10 +72,10 @@ module  light # (
 	// Update the output accordingly to the selection signal.
 	always @ (posedge clk) begin
         case (inSel)
-            2'b00: rMask <= 12'b111000000000;
-            2'b01: rMask <= 12'b000111000000;
-            2'b10: rMask <= 12'b000000111000;
-            2'b11: rMask <= 12'b000000000111;
+            2'b00: rMask <= 12'b111000000000;   // Red only.
+            2'b01: rMask <= 12'b000111000000;   // Green only.
+            2'b10: rMask <= 12'b000000111000;   // Yellow only.
+            2'b11: rMask <= 12'b111000000111;   // Red & Walk together.
         endcase
 	end
 	

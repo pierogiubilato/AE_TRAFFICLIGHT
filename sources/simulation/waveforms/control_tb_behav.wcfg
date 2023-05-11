@@ -11,15 +11,19 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="32,499,988.498 ns"></ZoomStartTime>
-      <ZoomEndTime time="32,500,016.419 ns"></ZoomEndTime>
-      <Cursor1Time time="32,500,002.498 ns"></Cursor1Time>
+      <ZoomStartTime time="49,366.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="58,091.000001 us"></ZoomEndTime>
+      <Cursor1Time time="26,130.000000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="194"></NameColumnWidth>
-      <ValueColumnWidth column_width="81"></ValueColumnWidth>
+      <ValueColumnWidth column_width="73"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="27" />
+   <wave_markers>
+      <marker time="14054000" label="" />
+      <marker time="6770000000" label="" />
+   </wave_markers>
    <wvobject type="divider" fp_name="divider318">
       <obj_property name="label">Simulation</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -82,13 +86,6 @@
       <obj_property name="CustomSignalColor">#DCDCDC</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
-   <wvobject fp_name="/control_tb/C_INT_PEDESTRIAN" type="array">
-      <obj_property name="ElementShortName">C_INT_PEDESTRIAN[31:0]</obj_property>
-      <obj_property name="ObjectShortName">C_INT_PEDESTRIAN[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      <obj_property name="CustomSignalColor">#DCDCDC</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
    <wvobject type="divider" fp_name="divider319">
       <obj_property name="label">Timing</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -146,6 +143,12 @@
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">#A0A0A4</obj_property>
    </wvobject>
+   <wvobject fp_name="/control_tb/DUT/rStateOld" type="array">
+      <obj_property name="ElementShortName">rStateOld[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rStateOld[1:0]</obj_property>
+      <obj_property name="CustomSignalColor">#A0A0A4</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
    <wvobject fp_name="/control_tb/DUT/rState" type="array">
       <obj_property name="ElementShortName">rState[1:0]</obj_property>
       <obj_property name="ObjectShortName">rState[1:0]</obj_property>
@@ -169,8 +172,10 @@
       <obj_property name="ElementShortName">rPedestrian</obj_property>
       <obj_property name="ObjectShortName">rPedestrian</obj_property>
    </wvobject>
-   <wvobject fp_name="/control_tb/DUT/rStateJump" type="logic">
-      <obj_property name="ElementShortName">rStateJump</obj_property>
-      <obj_property name="ObjectShortName">rStateJump</obj_property>
+   <wvobject fp_name="/control_tb/DUT/wStateJump" type="logic">
+      <obj_property name="ElementShortName">wStateJump</obj_property>
+      <obj_property name="ObjectShortName">wStateJump</obj_property>
+      <obj_property name="CustomSignalColor">#FF0080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
 </wave_config>

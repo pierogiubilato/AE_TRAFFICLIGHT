@@ -38,63 +38,147 @@
 `timescale 1 ns / 1 ps
 
 // Behavioural.
-module top # () (
+module top # (
+
+        // Clocking and timing parameters.
+        C_CLK_FRQ = 100_000_000,    // Master clock frequency [Hz].
+        C_DBC_INTERVAL = 1,         // Debouncer lock interval [ms].
+        
+        // "Human timebase" blinker.
+        C_BLK_PERIOD = 1000,        // Blinker period [ms].
+
+        // Traffic lights intervals (in 'blinks' units).
+        C_INT_RED = 10,             // Red interval [blinks]
+        C_INT_GREEN = 10,           // Green interval [blinks]
+        C_INT_YELLOW = 2,           // Yellow interval [blinks]
+        C_INT_WALK = 5,             // Walk interval [blinks]
+
+        // Colors of the lights:       R     G     B.
+        parameter [11:0] C_COLORS = {1'b1, 1'b0, 1'b0,  // Red state.   
+		                             1'b0, 1'b1, 1'b0,  // Green state.
+		                             1'b1, 1'b1, 1'b0,  // Yellow state.
+		                             1'b1, 1'b1, 1'b1}  // Walk state.
+
+    ) (
         
         // Timing.
-        input sysRstb,          // System reset, active low.
-        input sysClk,           // System clock, SE input.
+        input sysRstb,              // System reset, active low.
+        input sysClk,               // System clock, SE input.
                 
         // External switches and buttons inputs.
-        input [3:0] sw,         // Switches.
-        input [3:0] btn,        // Push buttons.
+        input [3:0] sw,             // Switches.
+        input [3:0] btn,            // Push buttons.
         
         // Standard LEDs outputs.
-        output [3:0] led,       // LEDs.   
-        output [11:0] ledRGB    // RGB LEDs
+        output [3:0] led,           // LEDs.   
+        output [11:0] ledRGB        // RGB LEDs
     );
+   
+        
     
-
     // =========================================================================
     // ==                                Wires                                ==
     // =========================================================================
     
-
-
-    // =========================================================================
-    // ==                             Registers                               ==
-    // =========================================================================
+    // Buttons.
+    wire wDcbPedestrian;            // Debounced wire for pedestrian button.
+        
+    // Buttons.
+    wire wDcbMode;                  // Debounced wire for mode switch.
+        
+    // Blinker.
+    wire wBlink;                    // Blinker output.
     
-
-    // 24 bit counter.
-    reg [23:0] rCount = 0;
+    // Control.
+    wire wCtrlState;                // Control status.
+    
+        
         
     
     // =========================================================================
-    // ==                    Asynchronous assignments                         ==
+    // ==                             Modules                                 ==
     // =========================================================================
-    
-    // Push buttons to LEDs.
-    assign led[1] = btn[1];
-    assign led[2] = btn[2];
-    assign led[3] = btn[3];
-    
-    // Switches to a single RGB LED.
-    assign ledRGB[0] = sw[0];
-    assign ledRGB[1] = sw[1];
-    assign ledRGB[2] = sw[2];
-    
-    // Counter to a LED.
-    assign led[0] = rCount[23];
-    
-    
-    
-    // =========================================================================
-    // ==                       Synchronous processes                         ==
-    // =========================================================================
-    
-    // Simple count process.
-    always @ (posedge(sysClk)) begin
-        rCount <= rCount + 1;
-    end
 
+    
+    // Debouncer for the pedestriam button.
+    debounce #(
+        .C_CLK_FRQ(C_CLK_FRQ),          // Clock frequency [Hz].
+        .C_INTERVAL(C_DBC_INTERVAL)     // Debounce lock interval [ms].
+    ) DBC_PEDESTRIAN (
+        .rstb(sysRstb),
+        .clk(sysClk),
+        .in(btn[0]),                    // Input button #0.
+        .out(wDbcPedestrian)
+    );   
+    
+    // Debouncer for the mode selector.
+    debounce #(
+        .C_CLK_FRQ(C_CLK_FRQ),          // Clock frequency [Hz].
+        .C_INTERVAL(C_DBC_INTERVAL)     // Debounce lock interval [ms].
+    ) DBC_MODE (
+        .rstb(sysRstb),
+        .clk(sysClk),
+        .in(sw[0]),                     // Input switch #0.
+        .out(wDbcMode)
+    );   
+        
+    // Generate blink timebase.
+    blinker #(
+        .C_CLK_FRQ(C_CLK_FRQ),          // Clock frequency [Hz].
+        .C_PERIOD(C_BLK_PERIOD)         // Blinker period [ms].
+    ) BLINKER (
+        .rstb(sysRstb),
+        .clk(sysClk),
+        .out(wBlink)
+    );
+    
+    // Main control unit.
+    control #(
+        .C_INT_RED(C_INT_RED),          // Red interval [blinks].
+        .C_INT_GREEN(C_INT_GREEN),      // Green interval [blinks].
+        .C_INT_YELLOW(C_INT_YELLOW),    // Yellow interval [blinks].    
+        .C_INT_WALK(C_INT_WALK)         // Walk interval [blinks].
+    ) CONTROL (
+        
+        // Timing.
+        .rstb(sysRstb),
+        .clk(sysClk),
+        .blink(wBlink),
+        
+        // Inputs.
+        .inMode(wDbcMode),              // From DBC_PEDESTRIAN. 
+        .inTraffic(1'b0),               // UNUSED.
+	    .inPedestrian(rPedestrian),     // From DBC_PEDESTRIAN.
+        
+        // Outputs.
+        .outLight(wCtrlState)
+    );
+    
+    // State to RGB LEDs conversion.
+    light #(
+        .C_COLORS(C_COLORS)             // Light RGB colors.    
+    ) LIGHT (
+        .rstb(sysRstb),
+        .clk(sysClk),
+        .inSel(wCtrlState),             // State from Control.  
+        .outLED(ledRGB)                 // Toward output RGB LEDs.
+    );
+
+    
+    
+    
+    
+    // =========================================================================
+    // ==                     Asynchronous connections                        ==
+    // =========================================================================
+
+    // Connects the blinker signal to (non-RGB) led #0.
+    assign led[0] = wBlink;
+    
+    // Connects the pedestrin button signal to (non-RGB) led #1.
+    assign led[1] = wDbcPedestrian;
+    
+    // Connects the blinker signal to (non-RGB) led #2.
+    assign led[2] = wDbcMode;
+    
 endmodule

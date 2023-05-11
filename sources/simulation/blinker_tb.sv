@@ -46,22 +46,38 @@ module blinker_tb ();
     reg rClk;
     
     // Data out.
-    wire wOut;
-
+    wire wOut1;
+    wire wOut2;
 
 
     // ==========================================================================
     // ==                                 DUTs                                 ==
     // ==========================================================================
 
-    // Instantiate the UUT
+    // Instantiate the DUT #1
     blinker #(
         .C_CLK_FRQ(C_CLK_FRQ),
         .C_PERIOD(C_PERIOD)
-    ) DUT (
+    ) DUT1 (
+        // Inputs.
         .rstb(rRstb),
         .clk(rClk),
-        .out(wOut)
+        
+        // Out.
+        .out(wOut1)
+    );
+
+    // Instantiate the DUT #2
+    blinker #(
+        .C_CLK_FRQ(C_CLK_FRQ),
+        .C_PERIOD(2)
+    ) DUT2 (
+        // Inputs.
+        .rstb(rRstb),
+        .clk(rClk),
+        
+        // Out.
+        .out(wOut2)
     );
 
     // Initialize Inputs

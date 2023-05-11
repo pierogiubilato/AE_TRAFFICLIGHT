@@ -42,10 +42,10 @@ module control_tb ();
     parameter C_PERIOD = 1;       // Light switching [ms].
     
     // Intervals
-    parameter C_INT_RED = 15;
-    parameter C_INT_GREEN = 20;
-    parameter C_INT_YELLOW = 5;
-    parameter C_INT_PEDESTRIAN = 10;
+    parameter C_INT_RED = 4;
+    parameter C_INT_GREEN = 6;
+    parameter C_INT_YELLOW = 2;
+    parameter C_INT_WALK = 4;
         
     // Timing signal.
     reg rRstb;
@@ -72,8 +72,8 @@ module control_tb ();
         // Intervals.
         .C_INT_RED(C_INT_RED),
         .C_INT_GREEN(C_INT_GREEN),
-        .C_INT_YELLO(C_INT_YELLOW),
-        .C_INT_PEDESTRIAN(C_INT_PEDESTRIAN)
+        .C_INT_YELLOW(C_INT_YELLOW),
+        .C_INT_WALK(C_INT_WALK)
   
     ) DUT (
         
@@ -96,8 +96,14 @@ module control_tb ();
 		$display ($time, " << Starting the Simulation >> ");
         rRstb = 1'b0;
 		rClk = 1'b0;
+		rMode = 1'b0;
 		rBlink = 1'b0;
+		rPedestrian = 1'b0;
         #200 rRstb = 1'b1;
+        
+        // At half simulation, switch mode to 1.
+        #50ms rMode <= 1'b1;
+        
     end
 
     // Main clock generation. This process generates a clock with period equal to 
@@ -108,10 +114,20 @@ module control_tb ();
         rClk = ! rClk;
     end  
     
-    // Blink generator. Generates a 1ms beat for quick simulation. 
+    // Blink generator. Generates a 100us beat for quick simulation. 
     always begin
-        #0.0005s;
+        # 50000;
         rBlink = ! rBlink;
+    end
+    
+    // Pedestrian button.
+    always begin
+        # (100us * $dist_normal(seed, 50, 20));
+        rPedestrian = 1'b1;
+        # (10us * $dist_normal(seed, 20, 10));
+        rPedestrian = 1'b0;
     end  
+    
+    
    
 endmodule

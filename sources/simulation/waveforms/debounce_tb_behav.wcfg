@@ -11,15 +11,18 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="2,872.000001 us"></ZoomEndTime>
-      <Cursor1Time time="14.000000 us"></Cursor1Time>
+      <ZoomStartTime time="54,855.928 ns"></ZoomStartTime>
+      <ZoomEndTime time="55,747.929 ns"></ZoomEndTime>
+      <Cursor1Time time="55,459.928 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="185"></NameColumnWidth>
-      <ValueColumnWidth column_width="81"></ValueColumnWidth>
+      <ValueColumnWidth column_width="77"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="14" />
+   <wave_markers>
+      <marker time="55459928" label="" />
+   </wave_markers>
    <wvobject type="divider" fp_name="divider95">
       <obj_property name="label">Simulation</obj_property>
       <obj_property name="DisplayName">label</obj_property>

@@ -56,7 +56,7 @@ module debounce_tb ();
     // ==                                 DUTs                                 ==
     // ==========================================================================
 
-    // Instantiate the UUT
+    // Instantiate the DUT
     debounce #(
         .C_CLK_FRQ(C_CLK_FRQ),
         .C_INTERVAL(C_BTN_INTERVAL)

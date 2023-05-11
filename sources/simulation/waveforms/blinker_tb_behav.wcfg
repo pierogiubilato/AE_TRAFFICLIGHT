@@ -3,30 +3,46 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="debounce_tb_behav.wdb" id="1">
+      <db_ref path="blinker_tb_behav.wdb" id="1">
          <top_modules>
-            <top_module name="debounce_tb" />
+            <top_module name="blinker_tb" />
             <top_module name="glbl" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000000 ms"></ZoomStartTime>
-      <ZoomEndTime time="335.784390246 ms"></ZoomEndTime>
-      <Cursor1Time time="100.000000000 ms"></Cursor1Time>
+      <ZoomEndTime time="27.100000001 ms"></ZoomEndTime>
+      <Cursor1Time time="64.347300102 ms"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="185"></NameColumnWidth>
-      <ValueColumnWidth column_width="85"></ValueColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="5" />
+   <WVObjectSize size="13" />
    <wave_markers>
-      <marker time="36700441567" label="" />
+      <marker time="15728951350" label="" />
    </wave_markers>
    <wvobject type="divider" fp_name="divider43">
       <obj_property name="label">Simulation</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/C_CLK_FRQ" type="array">
+      <obj_property name="ElementShortName">C_CLK_FRQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_CLK_FRQ[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/C_CLK_JTR" type="array">
+      <obj_property name="ElementShortName">C_CLK_JTR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_CLK_JTR[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/C_CLK_PERIOD" type="other">
+      <obj_property name="ElementShortName">C_CLK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">C_CLK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/C_PERIOD" type="array">
+      <obj_property name="ElementShortName">C_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">C_PERIOD[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider41">
       <obj_property name="label">Local parameters</obj_property>
@@ -38,10 +54,30 @@
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">#A0A0A4</obj_property>
    </wvobject>
+   <wvobject fp_name="/blinker_tb/rRstb" type="logic">
+      <obj_property name="ElementShortName">rRstb</obj_property>
+      <obj_property name="ObjectShortName">rRstb</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/rClk" type="logic">
+      <obj_property name="ElementShortName">rClk</obj_property>
+      <obj_property name="ObjectShortName">rClk</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
    <wvobject type="divider" fp_name="divider56">
       <obj_property name="label">Output</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">#A0A0A4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/wOut1" type="logic">
+      <obj_property name="ElementShortName">wOut1</obj_property>
+      <obj_property name="ObjectShortName">wOut1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/blinker_tb/wOut2" type="logic">
+      <obj_property name="ElementShortName">wOut2</obj_property>
+      <obj_property name="ObjectShortName">wOut2</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider57">
       <obj_property name="label">DUT registers</obj_property>

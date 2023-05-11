@@ -79,6 +79,11 @@ module  debounce # (
     // =========================================================================
 
 	// XOR of the thwo FF to generate counter reset signal.
+	// FF1  FF2   O
+	//  0    0    0
+	//  0    1    1
+	//  1    0    1
+	//  1    1    0
 	assign wClear = (DFF1 ^ DFF2);
 	
 	// Enable signal, makes the output FF latch the signal from FF2. Inverted,
@@ -98,13 +103,13 @@ module  debounce # (
 			DFF1 <= 1'b0;
 			DFF2 <= 1'b0;
 		end else begin
-			DFF1 <= in;
-			DFF2 <= DFF1;
+			DFF1 <= in;   // Hardware signal from the butto.
+			DFF2 <= DFF1;  // TRansported to the second FF.
 		end
 	end
 
-	// Increments the counter if the signal is stable
-	always @ (posedge clk) begin
+	// Increments the counter if the signal is stable.
+	always @(posedge clk) begin
 		
 		// Reset the counter.
 		if (rstb ==  1'b0 || wClear == 1'b1) begin
