@@ -147,8 +147,8 @@ module top # (
         
         // Inputs.
         .inMode(wDbcMode),              // From DBC_PEDESTRIAN. 
-        .inTraffic(1'b0),               // UNUSED.
-	    .inPedestrian(rPedestrian),     // From DBC_PEDESTRIAN.
+        //.inTraffic(1'b0),               // UNUSED.
+	    .inPedestrian(wDbcPedestrian),  // From DBC_PEDESTRIAN.
         
         // Outputs.
         .outLight(wCtrlState)
