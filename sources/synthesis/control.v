@@ -95,15 +95,19 @@ module control #(
     // ==                        Synchronous processes                        ==
     // =========================================================================
 
+    
+
+
 	// State machine main synchronous process. Transfer 'lStateNext' into 'rState'
-    always @(posedge clk) begin
+	// The sensitivity list contains only "edged" events; the tool will infer the
+	// reset condition from the first "if".
+    always @(negedge rstb, posedge clk) begin
         
         // Reset (bar).
         if (rstb == 1'b0) begin
             rState <= sRed;
             rStateOld <= sRed;
-            outLight <= 2'b00;
-        
+            
         // State transition.
         end else begin
             
@@ -117,7 +121,8 @@ module control #(
     end
     
     // State machine synchronous output (here for example, redundant
-    // for this specific application.
+    // for this specific application. In this case, the sensitivity 
+    // list contains only asynchronous (no official clocks) signals.
     always @(rstb, rState) begin
         
         // Reset (bar).
@@ -134,18 +139,26 @@ module control #(
     end
     
     // Interval counter. It counts at every 'blink' positive edge transition.
-    // It resets on 'rstb' and at every state transition.
-    always @(posedge blink) begin
+    // It resets on 'rstb' and at every state transition. LOOK at the sensitivity
+    // list: only "EDGED" events are used, otherwise the tool will not
+    // correctly synthetize ot. (For simulation there are no issues).
+    always @(negedge rstb, posedge wStateJump, posedge blink) begin
         
-        // Reset (bar) the timer.
-        if (rstb == 1'b0 | wStateJump == 1'b1) begin
+        // Master reset (bar).
+        if (rstb == 1'b0) begin
             rTimer <= 0;
+        
+        // Reset because of a state jump.
+        end else if(wStateJump == 1'b1) begin
+            rTimer <= 0;
+        
+        // Increase the timer.
         end else begin
             rTimer <= rTimer + 1;
         end
     end
     
-    // Pedestrian button latch. Stores the last value of the pedestrian button,
+    // Pedestrian button LATCH. Stores the last value of the pedestrian button,
     // unless we are in reset or already in the pedestrian state, in which case
     // the value is reset to zero. 
     always @(rstb, rState, inPedestrian) begin
@@ -154,7 +167,11 @@ module control #(
         if (rstb == 1'b0 || rState == sWalk) begin
             rPedestrian <= 1'b0;
         end else begin
-            rPedestrian <= (rPedestrian | inPedestrian);
+            
+            // Switch to '1' if the input is '1', or the there has been no
+            if (inPedestrian == 1'b1) begin
+                rPedestrian <= 1'b1;
+            end
         end
     end
     
@@ -174,7 +191,7 @@ module control #(
 	// WARNING: this is a purely combinatorial process, no D-FF involved. Even
 	// if 'lStateNext' is defined as register (reg), the tool will infer a simple
 	// combinatorial path.
-    always @(rState, rTimer, inMode, inPedestrian, inTraffic) begin
+    always @(rState, rTimer, inMode, rPedestrian) begin
         
         // Select among states.
         case (rState)

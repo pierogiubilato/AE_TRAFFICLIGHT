@@ -42,10 +42,10 @@ module top # (
 
         // Clocking and timing parameters.
         C_CLK_FRQ = 100_000_000,    // Master clock frequency [Hz].
-        C_DBC_INTERVAL = 1,         // Debouncer lock interval [ms].
+        C_DBC_INTERVAL = 10,        // Debouncer lock interval [ms].
         
         // "Human timebase" blinker.
-        C_BLK_PERIOD = 1000,        // Blinker period [ms].
+        C_BLK_PERIOD = 3000,        // Blinker period [ms].
 
         // Traffic lights intervals (in 'blinks' units).
         C_INT_RED = 10,             // Red interval [blinks]
@@ -80,17 +80,17 @@ module top # (
     // ==                                Wires                                ==
     // =========================================================================
     
-    // Buttons.
+    // (debounced) buttons.
     wire wDcbPedestrian;            // Debounced wire for pedestrian button.
         
-    // Buttons.
+    // (debounced) switches.
     wire wDcbMode;                  // Debounced wire for mode switch.
         
     // Blinker.
     wire wBlink;                    // Blinker output.
     
     // Control.
-    wire wCtrlState;                // Control status.
+    wire [1:0] wCtrlLight;          // Control light status.
     
         
         
@@ -147,11 +147,11 @@ module top # (
         
         // Inputs.
         .inMode(wDbcMode),              // From DBC_PEDESTRIAN. 
-        //.inTraffic(1'b0),               // UNUSED.
+        .inTraffic(1'b0),               // UNUSED.
 	    .inPedestrian(wDbcPedestrian),  // From DBC_PEDESTRIAN.
         
         // Outputs.
-        .outLight(wCtrlState)
+        .outLight(wCtrlLight)
     );
     
     // State to RGB LEDs conversion.
@@ -160,12 +160,11 @@ module top # (
     ) LIGHT (
         .rstb(sysRstb),
         .clk(sysClk),
-        .inSel(wCtrlState),             // State from Control.  
+        .inSel(wCtrlLight),             // Light status from Control.  
         .outLED(ledRGB)                 // Toward output RGB LEDs.
     );
 
-    
-    
+        
     
     
     // =========================================================================

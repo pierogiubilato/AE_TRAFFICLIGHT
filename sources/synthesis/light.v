@@ -44,7 +44,7 @@ module  light # (
 	) (
 		input rstb,               // Reset (bar).  
 		input clk,                // Clock.
-		input [1 : 0] inSel,      // Selection (light selection).
+		input [1:0] inSel,        // Selection (light selection).
 		output [11:0] outLED      // Output LED to fabric.
 	);
 
