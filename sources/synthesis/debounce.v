@@ -55,7 +55,7 @@ module  debounce # (
     // Prepare the counter size so that full counting would take two times the
 	// C_INTERVAL to wait for. By checking the counter MSB, it will be equivalent
 	// to wait for C_INTERVAL time. 
-    localparam C_CYCLES = 2 * C_CLK_FRQ * C_INTERVAL / 1000;
+    localparam C_CYCLES = $rtoi(2 * C_CLK_FRQ * C_INTERVAL / 1000);
     localparam C_CYCLES_WIDTH = $clog2(C_CYCLES);
    
 
