@@ -26,7 +26,7 @@
 
 ## External reset signal.
 #set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports { ck_ioa }]; #IO_L10N_T1_D15_14 Sch=ck_ioa
-set_property -dict { PACKAGE_PIN C2    IOSTANDARD LVCMOS33 } [get_ports { sysRstb }]; #IO_L16P_T2_35 Sch=ck_rst
+set_property -dict {PACKAGE_PIN C2 IOSTANDARD LVCMOS33} [get_ports sysRstb]
 
 ## Clock signal
 set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports sysClk]
@@ -236,6 +236,7 @@ set_property -dict {PACKAGE_PIN B8 IOSTANDARD LVCMOS33} [get_ports {btn[3]}]
 #set_property -dict { PACKAGE_PIN A16   IOSTANDARD LVCMOS33     } [get_ports { isns0v95_n }]; #IO_L8N_T1_AD10N_15 Sch=ad_n[10]
 #set_property -dict { PACKAGE_PIN A15   IOSTANDARD LVCMOS33     } [get_ports { isns0v95_p }]; #IO_L8P_T1_AD10P_15 Sch=ad_p[10]
 
-set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 
-set_property CONFIG_MODE SPIx4 [current_design]
+set_property CONFIG_MODE SPIx1 [current_design]
+

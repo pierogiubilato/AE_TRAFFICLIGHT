@@ -96,8 +96,6 @@ module control #(
     // =========================================================================
 
     
-
-
 	// State machine main synchronous process. Transfer 'lStateNext' into 'rState'
 	// The sensitivity list contains only "edged" events; the tool will infer the
 	// reset condition from the first "if".

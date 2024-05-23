@@ -41,7 +41,9 @@
 module top # (
 
         // Clocking and timing parameters.
-        C_CLK_FRQ = 100_000_000,    // Master clock frequency [Hz].
+        C_CLK_BRD_FRQ = 100_000_000,// Board clock frequency [Hz].
+        C_CLK_VAR_FRQ = 10_000_000, // Master clock frequency [Hz].
+        
         C_DBC_INTERVAL = 10,        // Debouncer lock interval [ms].
         
         // "Human timebase" blinker.
@@ -80,11 +82,15 @@ module top # (
     // ==                                Wires                                ==
     // =========================================================================
     
+    // Cocks.
+    wire wClk_BRD_0;
+    wire wClk_VAR_0;
+    
     // (debounced) buttons.
-    wire wDcbPedestrian;            // Debounced wire for pedestrian button.
+    wire wDbcPedestrian;            // Debounced wire for pedestrian button.
         
     // (debounced) switches.
-    wire wDcbMode;                  // Debounced wire for mode switch.
+    wire wDbcMode;                  // Debounced wire for mode switch.
         
     // Blinker.
     wire wBlink;                    // Blinker output.
@@ -99,36 +105,47 @@ module top # (
     // ==                             Modules                                 ==
     // =========================================================================
 
-    
+    // Clock manager tile.
+    clockHrd #(
+        .C_IN_FRQ(C_CLK_BRD_FRQ),       // Board clock frequency [Hz].
+        .C_VAR_FRQ(C_CLK_VAR_FRQ)       // Programmable clock frequency [Hz].
+    ) CLOCK (
+        .rstn(sysRstb),
+        .clkIn(sysClk),                 // Clock from the board.    
+        
+        .clk100_0(wClk_100_0),          // 100 MHz out clock.
+        .clkVar_0(wClk_VAR_0)           // Programmable clock output.
+    );
+        
     // Debouncer for the pedestriam button.
     debounce #(
-        .C_CLK_FRQ(C_CLK_FRQ),          // Clock frequency [Hz].
+        .C_CLK_FRQ(C_CLK_VAR_FRQ),      // Reference clock frequency [Hz].
         .C_INTERVAL(C_DBC_INTERVAL)     // Debounce lock interval [ms].
     ) DBC_PEDESTRIAN (
         .rstb(sysRstb),
-        .clk(sysClk),
+        .clk(wClk_VAR_0),
         .in(btn[0]),                    // Input button #0.
         .out(wDbcPedestrian)
     );   
     
     // Debouncer for the mode selector.
     debounce #(
-        .C_CLK_FRQ(C_CLK_FRQ),          // Clock frequency [Hz].
-        .C_INTERVAL(C_DBC_INTERVAL)     // Debounce lock interval [ms].
+        .C_CLK_FRQ(C_CLK_VAR_FRQ),          // Clock frequency [Hz].
+        .C_INTERVAL(C_DBC_INTERVAL)         // Debounce lock interval [ms].
     ) DBC_MODE (
         .rstb(sysRstb),
-        .clk(sysClk),
-        .in(sw[0]),                     // Input switch #0.
+        .clk(wClk_VAR_0),
+        .in(sw[0]),                         // Input switch #0.
         .out(wDbcMode)
     );   
         
-    // Generate blink timebase.
+    // Blink timebase generatior.
     blinker #(
-        .C_CLK_FRQ(C_CLK_FRQ),          // Clock frequency [Hz].
+        .C_CLK_FRQ(C_CLK_VAR_FRQ),      // Reference clock frequency [Hz].
         .C_PERIOD(C_BLK_PERIOD)         // Blinker period [ms].
     ) BLINKER (
         .rstb(sysRstb),
-        .clk(sysClk),
+        .clk(wClk_VAR_0),
         .out(wBlink)
     );
     
@@ -142,7 +159,7 @@ module top # (
         
         // Timing.
         .rstb(sysRstb),
-        .clk(sysClk),
+        .clk(wClk_VAR_0),
         .blink(wBlink),
         
         // Inputs.
@@ -159,7 +176,7 @@ module top # (
         .C_COLORS(C_COLORS)             // Light RGB colors.    
     ) LIGHT (
         .rstb(sysRstb),
-        .clk(sysClk),
+        .clk(wClk_VAR_0),
         .inSel(wCtrlLight),             // Light status from Control.  
         .outLED(ledRGB)                 // Toward output RGB LEDs.
     );
