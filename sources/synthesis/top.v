@@ -43,17 +43,16 @@ module top # (
         // Clocking and timing parameters.
         C_CLK_BRD_FRQ = 100_000_000,// Board clock frequency [Hz].
         C_CLK_VAR_FRQ = 10_000_000, // Master clock frequency [Hz].
-        
         C_DBC_INTERVAL = 10,        // Debouncer lock interval [ms].
         
         // "Human timebase" blinker.
-        C_BLK_PERIOD = 3000,        // Blinker period [ms].
+        C_BLK_PERIOD = 100,         // Blinker period [ms].
 
         // Traffic lights intervals (in 'blinks' units).
-        C_INT_RED = 10,             // Red interval [blinks]
-        C_INT_GREEN = 10,           // Green interval [blinks]
-        C_INT_YELLOW = 2,           // Yellow interval [blinks]
-        C_INT_WALK = 5,             // Walk interval [blinks]
+        C_INT_RED = 40,             // Red interval [blinks]
+        C_INT_GREEN = 40,           // Green interval [blinks]
+        C_INT_YELLOW = 10,          // Yellow interval [blinks]
+        C_INT_WALK = 40,            // Walk interval [blinks]
 
         // Colors of the lights:       R     G     B.
         parameter [11:0] C_COLORS = {1'b1, 1'b0, 1'b0,  // Red state.   
@@ -83,7 +82,6 @@ module top # (
     // =========================================================================
     
     // Cocks.
-    wire wClk_BRD_0;
     wire wClk_VAR_0;
     
     // (debounced) buttons.
@@ -97,7 +95,7 @@ module top # (
     
     // Control.
     wire [1:0] wCtrlLight;          // Control light status.
-    
+    wire wPedestrianLatch;          // Status of the pedestrian latch.
         
         
     
@@ -113,7 +111,7 @@ module top # (
         .rstn(sysRstb),
         .clkIn(sysClk),                 // Clock from the board.    
         
-        .clk100_0(wClk_100_0),          // 100 MHz out clock.
+        //.clk100_0(wClk_100_0),        // 100 MHz out clock.
         .clkVar_0(wClk_VAR_0)           // Programmable clock output.
     );
         
@@ -146,7 +144,7 @@ module top # (
     ) BLINKER (
         .rstb(sysRstb),
         .clk(wClk_VAR_0),
-        .out(wBlink)
+        .out(wBlink)                    // Blink signal.
     );
     
     // Main control unit.
@@ -168,6 +166,7 @@ module top # (
 	    .inPedestrian(wDbcPedestrian),  // From DBC_PEDESTRIAN.
         
         // Outputs.
+        .outPedLatch(wPedestrianLatch), // Latch of the pedestrian button.
         .outLight(wCtrlLight)
     );
     
@@ -181,8 +180,6 @@ module top # (
         .outLED(ledRGB)                 // Toward output RGB LEDs.
     );
 
-        
-    
     
     // =========================================================================
     // ==                     Asynchronous connections                        ==
@@ -194,7 +191,10 @@ module top # (
     // Connects the pedestrin button signal to (non-RGB) led #1.
     assign led[1] = wDbcPedestrian;
     
-    // Connects the blinker signal to (non-RGB) led #2.
+    // Connects the pedestrian mode to (non-RGB) led #2.
     assign led[2] = wDbcMode;
+    
+    // Connects the pedestrian mode to (non-RGB) led #3.
+    assign led[3] = wPedestrianLatch;
     
 endmodule

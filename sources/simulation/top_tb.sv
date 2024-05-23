@@ -41,6 +41,7 @@ module top_tb ();
             
     // Clocking and timing parameters. Here the values are arranged to allow 
     // having a "reasonable" simulation time.
+    parameter C_CLK_VAR_FRQ = 10_000_000;   // Target clock frequency [Hz].
     parameter C_DBC_INTERVAL = 0.01;        // Debouncer lock interval [ms].
     parameter C_BLK_PERIOD = 1.0;           // Blinker period [ms].
 
@@ -77,6 +78,9 @@ module top_tb ();
 
     // Instantiate the 'top' DUT
     top #(
+        .C_CLK_BRD_FRQ(C_CLK_FRQ),
+        .C_CLK_VAR_FRQ(C_CLK_VAR_FRQ),
+        
         .C_DBC_INTERVAL(C_DBC_INTERVAL),
         .C_BLK_PERIOD(C_BLK_PERIOD),
         .C_INT_RED(C_INT_RED),

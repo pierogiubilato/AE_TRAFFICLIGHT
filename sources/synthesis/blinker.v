@@ -16,7 +16,7 @@
 // --                                PARAMETERS                               --
 // -----------------------------------------------------------------------------
 //
-// C_CLK_FRQ:       frequency of the clock in [cycles per second] {100000000}. 
+// C_CLK_FRQ:       frequency of the clock in [cycles per second] {100_000_000}. 
 // C_PERIOD:        the wave period, expressed in [ms].
 
 

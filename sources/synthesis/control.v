@@ -54,6 +54,8 @@ module control #(
 	input inMode,                      // Pedestrian (1) / traffic (0) priority selector.
 	input inTraffic,                   // Traffic sensor.
 	input inPedestrian,                // Pedestrian button.
+	
+	output outPedLatch,                // Status of the pedestrian latch.
 	output reg[1 : 0] outLight         // Output light selection.
 );
 
@@ -159,16 +161,18 @@ module control #(
     // Pedestrian button LATCH. Stores the last value of the pedestrian button,
     // unless we are in reset or already in the pedestrian state, in which case
     // the value is reset to zero. 
-    always @(rstb, rState, inPedestrian) begin
+    always @ (negedge rstb, posedge clk) begin
         
         // Reset (bar).
         if (rstb == 1'b0 || rState == sWalk) begin
             rPedestrian <= 1'b0;
         end else begin
             
-            // Switch to '1' if the input is '1', or the there has been no
+            // Switch to '1' if the input is '1'.
             if (inPedestrian == 1'b1) begin
                 rPedestrian <= 1'b1;
+            end else begin    
+                rPedestrian <= rPedestrian;
             end
         end
     end
@@ -182,7 +186,9 @@ module control #(
 	// changes. It is used to reset the counter at every state transition.
 	assign wStateJump = (rState != rStateOld) ? 1'b1 : 1'b0;
 	
-	
+	// Just show the status of the pedestrian latch.
+	assign outPedLatch = rPedestrian;
+		
 	// State machine async process. Update the next state considering the present 
 	// state ('rState') and the other conditions ('inMode', 'inPedestrian', 
 	// 'inTraffic'). 
@@ -239,9 +245,9 @@ module control #(
                 
                 // Jump only at the end of the yellow interval, always to red.
                 if (rTimer >= C_INT_YELLOW) begin
-                    lStateNext <= sRed;         // There is a pedestrian, jump to pedestrian.
+                    lStateNext <= sRed;
                 end else begin    
-                    lStateNext <= sYellow;      // There is NO pedestrian, jump to red.
+                    lStateNext <= sYellow;      
                 end
             end
                 
@@ -250,7 +256,7 @@ module control #(
  
                 // Jump only at the end of the pedestrian interval, and always to red for safety.
                 if (rTimer >= C_INT_WALK) begin
-                    lStateNext <= sRed;         // Timer expired, jump to red.
+                    lStateNext <= sRed;   // Timer expired, jump to red.
                 end else begin    
                     lStateNext <= sWalk;  // Wait for interval to expire..
                 end
